@@ -1,8 +1,8 @@
 import numpy
 
-BLAmp = numpy.pi / 20
-BLFreq = 10
-BLPhaseOffset = numpy.pi/4
+BLAmp = numpy.pi /4
+BLFreq = 1
+BLPhaseOffset = 0
 
 FLAmp = 4
 FLFreq = 20

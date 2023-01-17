@@ -32,5 +32,3 @@ class ROBOT:
     def Act(self, currIndex):
         for motor in self.motors.values():
             motor.Set_Value(self.robotId, currIndex)
-
-# In ith pass through the for loop, call the ith SENSOR instance's Get_Value() method. When called, this method should store the current value of the touch sensor in self.values. But, we do not know which element it should be stored in. It should be stored in the tth element, where t is the current time step.
