@@ -8,7 +8,7 @@ FLAmp = 4
 FLFreq = 20
 FLPhaseOffset = 0
 
-length = 1000
+length = 100
 start, end = 0, numpy.pi * 2
 
 sleepTimer = 1/60
