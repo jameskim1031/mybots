@@ -8,7 +8,7 @@ FLAmp = 4
 FLFreq = 20
 FLPhaseOffset = 0
 
-length = 500
+length = 100
 start, end = 0, numpy.pi * 2
 
 sleepTimer = 1/60
@@ -16,3 +16,5 @@ sleepTimer = 1/60
 force = 30
 
 numberOfGenerations = 10
+
+populationSize = 2

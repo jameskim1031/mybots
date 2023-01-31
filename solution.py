@@ -2,19 +2,26 @@ import pyrosim.pyrosim as pyrosim
 import numpy as np
 import os
 import random
+import time
 
 class SOLUTION:
-    def __init__(self):
+    def __init__(self, nextAvailableID):
+        self.myID = nextAvailableID
         self.weights = np.random.rand(3,2)
         self.weights = self.weights * 2 - 1
 
-    def Evaluate(self, method):
+    # in Evaluate(), just before reading in the file. fitnessFileName should be a string denoting the current fitness file of interest (e.g. fitness0.txt). The second statement sleeps search.py for a hundredth of a second if that file cannot be found.
+
+    def Evaluate(self, directOrGUI ):
         self.Create_World()
         self.Generate_Body()
         self.Generate_Brain()
-        os.system("python simulate.py " + method)
-        fitnessFile = open("fitness.txt", "r")
+        os.system("start /B python simulate.py " + directOrGUI + " " + str(self.myID))
+        while not os.path.exists("fitness" + str(self.myID) + ".txt"):
+            time.sleep(0.01)
+        fitnessFile = open("fitness" + str(self.myID) + ".txt", "r")
         self.fitness = float(fitnessFile.read())
+        print(self.fitness)
         fitnessFile.close()
         
 
@@ -35,7 +42,7 @@ class SOLUTION:
         pyrosim.End()
 
     def Generate_Brain(self):
-        pyrosim.Start_NeuralNetwork("brain.nndf")
+        pyrosim.Start_NeuralNetwork("brain" + str(self.myID) + ".nndf")
         pyrosim.Send_Sensor_Neuron(name = 0 , linkName = "Torso")
         pyrosim.Send_Sensor_Neuron(name = 1 , linkName = "BackLeg")
         pyrosim.Send_Sensor_Neuron(name = 2 , linkName = "FrontLeg")
@@ -51,3 +58,6 @@ class SOLUTION:
         randomRow = random.randint(0,2)
         randomColumn = random.randint(0,1)
         self.weights[randomRow,randomColumn] = (random.random() * 2) - 1
+
+    def Set_ID(self):
+        pass
