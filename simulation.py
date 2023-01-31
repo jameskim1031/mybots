@@ -11,6 +11,7 @@ from robot import ROBOT
 
 class SIMULATION:
     def __init__(self, directOrGUI):
+        self.directOrGUI = directOrGUI
         if directOrGUI == "DIRECT":
             self.physicsClient = p.connect(p.DIRECT)
         else:
@@ -24,7 +25,8 @@ class SIMULATION:
 
     def Run(self):
         for i in range(c.length):
-            time.sleep(c.sleepTimer)
+            if self.directOrGUI == "GUI":
+                time.sleep(c.sleepTimer)
             p.stepSimulation()
             self.robot.Sense(i)
             self.robot.Think()
