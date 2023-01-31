@@ -10,19 +10,36 @@ class SOLUTION:
         self.weights = np.random.rand(3,2)
         self.weights = self.weights * 2 - 1
 
-    # in Evaluate(), just before reading in the file. fitnessFileName should be a string denoting the current fitness file of interest (e.g. fitness0.txt). The second statement sleeps search.py for a hundredth of a second if that file cannot be found.
+    # We can fix all this by breaking SOLUTION's Evaluate() method into two methods: Start_Simulation() and Wait_For_Simulation_To_End().
+    # Cut those statements from Evaluate() required to start the simulation and paste them into Start_Simulation(). Copy over Evaluate()s argument(s) as well.
+    # Similarly, cut the statements that read in fitness from a file to Wait_For_Simulation_To_End(), include the while loop.
 
-    def Evaluate(self, directOrGUI ):
+    def Start_Simulation(self, directOrGUI):
         self.Create_World()
         self.Generate_Body()
         self.Generate_Brain()
         os.system("start /B python simulate.py " + directOrGUI + " " + str(self.myID))
+
+    def Wait_For_Simulation_To_End(self):
         while not os.path.exists("fitness" + str(self.myID) + ".txt"):
             time.sleep(0.01)
         fitnessFile = open("fitness" + str(self.myID) + ".txt", "r")
         self.fitness = float(fitnessFile.read())
-        print(self.fitness)
+        #print(self.fitness)
         fitnessFile.close()
+        os.system("del fitness" + str(self.myID) +".txt")
+
+    # def Evaluate(self, directOrGUI ):
+    #     self.Create_World()
+    #     self.Generate_Body()
+    #     self.Generate_Brain()
+    #     os.system("start /B python simulate.py " + directOrGUI + " " + str(self.myID))
+    #     while not os.path.exists("fitness" + str(self.myID) + ".txt"):
+    #         time.sleep(0.01)
+    #     fitnessFile = open("fitness" + str(self.myID) + ".txt", "r")
+    #     self.fitness = float(fitnessFile.read())
+    #     print(self.fitness)
+    #     fitnessFile.close()
         
 
     def Create_World(self):

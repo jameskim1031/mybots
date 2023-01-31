@@ -11,3 +11,5 @@ phc.Show_Best()
 #     os.system("python simulate.py")
 
 # Note that search.py uses parallel hillclimber's constructor, and two of its methods. Find these three functions in parallelHillClimber.py, comment out the code that is in them, and add just a pass statement for now.
+
+# start from 67

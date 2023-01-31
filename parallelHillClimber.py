@@ -12,10 +12,14 @@ class PARALLEL_HILL_CLIMBER:
             self.nextAvailableID += 1
         
 
-    # Modify PHC's Evolve() function to evaluate each of the parents, one after the other, using a for loop. Leave the for loop that iterates over generations commented out for now.
+    # Back in PHC's Evolve() function, comment out the reference to the second for loop, but leave the self....Wait_For... uncommented. This should deactivate our parallelism in Evolve() now: it now starts the simulation of the first parent, then waits for that simulation to end. Then, it starts the simulation of the second simulation, and so on.
     def Evolve(self):
         for solution in self.parent.values():
-            solution.Evaluate("GUI")
+            solution.Start_Simulation("GUI")
+        for solution in self.parent.values():
+            solution.Wait_For_Simulation_To_End()
+        #     print(solution.fitness)
+        
         # self.parent.Evaluate("GUI")
         # for currentGeneration in range(c.numberOfGenerations):
         #     self.Evolve_For_One_Generation()
@@ -25,7 +29,7 @@ class PARALLEL_HILL_CLIMBER:
 
         self.Mutate()
 
-        self.child.Evaluate("DIRECT")
+        self.child.Evaluate("GUI")
 
         self.Print()
 
