@@ -10,10 +10,6 @@ class SOLUTION:
         self.weights = np.random.rand(3,2)
         self.weights = self.weights * 2 - 1
 
-    # We can fix all this by breaking SOLUTION's Evaluate() method into two methods: Start_Simulation() and Wait_For_Simulation_To_End().
-    # Cut those statements from Evaluate() required to start the simulation and paste them into Start_Simulation(). Copy over Evaluate()s argument(s) as well.
-    # Similarly, cut the statements that read in fitness from a file to Wait_For_Simulation_To_End(), include the while loop.
-
     def Start_Simulation(self, directOrGUI):
         self.Create_World()
         self.Generate_Body()
@@ -25,7 +21,6 @@ class SOLUTION:
             time.sleep(0.01)
         fitnessFile = open("fitness" + str(self.myID) + ".txt", "r")
         self.fitness = float(fitnessFile.read())
-        #print(self.fitness)
         fitnessFile.close()
         os.system("del fitness" + str(self.myID) +".txt")
 
@@ -76,5 +71,5 @@ class SOLUTION:
         randomColumn = random.randint(0,1)
         self.weights[randomRow,randomColumn] = (random.random() * 2) - 1
 
-    def Set_ID(self):
-        pass
+    def Set_ID(self, nextAvailableID):
+        self.myID = nextAvailableID
