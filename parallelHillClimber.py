@@ -48,7 +48,7 @@ class PARALLEL_HILL_CLIMBER:
     # Uncomment and modify PHC's self.Select() to compete each child against its parent. If it wins, it should replace its parent in self.parents.
     def Select(self):
         for i in self.parents:
-            if self.parents[i].fitness > self.children[i].fitness:
+            if self.parents[i].fitness < self.children[i].fitness:
                 self.parents[i] = self.children[i]
 
     # Modify Print() to iterate through the keys in self.parents, and print the fitness of self.parents[key] and then the fitness of self.children[key] on the same line.
@@ -68,6 +68,9 @@ class PARALLEL_HILL_CLIMBER:
     # Finally, modify PHC's Show_Best() method to find the parent with the lowest fitness, and re-simulate that one with the graphics turned on. Note that we only need to use SOLUTION's Start_Simulation("GUI"); we do not to use Wait_For_... because we already have the fitness of this solution.
     def Show_Best(self):
         all_solution = self.parents.items()
-        lowest_fitness = min(all_solution, key=lambda x: x[1].fitness)
-        lowest_parent = lowest_fitness[1]
-        lowest_parent.Start_Simulation("GUI")
+        # lowest_fitness = min(all_solution, key=lambda x: x[1].fitness)
+        # lowest_parent = lowest_fitness[1]
+        # lowest_parent.Start_Simulation("GUI")
+        largest_fitness = max(all_solution, key=lambda x: x[1].fitness)
+        largest_parent = largest_fitness[1]
+        largest_parent.Start_Simulation("GUI")
