@@ -15,12 +15,12 @@ sleepTimer = 1/60
 
 force = 30
 
-numberOfGenerations = 5
+numberOfGenerations = 3
 
-populationSize = 5
+populationSize = 3
 
-numSensorNeurons = 9
+numSensorNeurons = 13
 
-numMotorNeurons = 8
+numMotorNeurons = 12
 
-motorJointRange = 0.4
+motorJointRange = 0.6
