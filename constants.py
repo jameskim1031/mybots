@@ -15,9 +15,9 @@ sleepTimer = 1/60
 
 force = 30
 
-numberOfGenerations = 3
+numberOfGenerations = 1
 
-populationSize = 3
+populationSize = 1
 
 numSensorNeurons = 13
 

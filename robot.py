@@ -52,7 +52,7 @@ class ROBOT:
         zPosition = basePosition[2]
 
         f = open("tmp" + self.solutionID + ".txt", "w")
-        f.write(str(xPosition))
+        f.write(str(xPosition * zPosition))
         f.close()
         
         os.system("rename tmp" + self.solutionID + ".txt fitness" + self.solutionID + ".txt")
