@@ -7,6 +7,7 @@ from sensor import SENSOR
 from motor import MOTOR
 import os
 import constants as c
+import math
 
 class ROBOT:
     def __init__(self, solutionID):
@@ -48,14 +49,13 @@ class ROBOT:
     def Get_Fitness(self):
         basePositionAndOrientation = p.getBasePositionAndOrientation(self.robotId)
         basePosition = basePositionAndOrientation[0]
-        # xPosition = basePosition[0]
-        zPosition = basePosition[2]
+        xPosition = basePosition[0]
+        #zPosition = basePosition[2]
+        #euclidean_distance = math.sqrt((xPosition - zPosition) ** 2)
 
         f = open("tmp" + self.solutionID + ".txt", "w")
-        f.write(str(zPosition))
+        f.write(str(xPosition))
         f.close()
         
         os.system("rename tmp" + self.solutionID + ".txt fitness" + self.solutionID + ".txt")
         exit()
-
-# Find where in the SIMULATION class hierarchy you have to modify the writing of fitness into fitnesssolutionID.txt instead of fitness.txt, and do so.

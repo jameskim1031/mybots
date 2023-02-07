@@ -13,14 +13,14 @@ start, end = 0, numpy.pi * 2
 
 sleepTimer = 1/60
 
-force = 30
+force = 50
 
-numberOfGenerations = 5
+numberOfGenerations = 10
 
-populationSize = 5
+populationSize = 10
 
-numSensorNeurons = 9
+numSensorNeurons = 3
 
-numMotorNeurons = 8
+numMotorNeurons = 2
 
-motorJointRange = 0.4
+motorJointRange = 0.8
