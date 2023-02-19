@@ -19,16 +19,12 @@ numberOfGenerations = 1
 
 populationSize = 1
 
-numSensorNeurons = 6
+numSensorNeurons = 9
 
-numMotorNeurons = 5
+numMotorNeurons = 4
 
 motorJointRange = 0.8
 
-bodyNum = 5
+maxBodyLength = 7
 
-maxHeight = 1
-
-maxWidth = 3
-
-maxLength = 2
+minBodyLength = 2
