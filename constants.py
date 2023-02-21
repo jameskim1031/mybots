@@ -1,6 +1,8 @@
-import numpy
+import numpy as np
+import random
 
-BLAmp = numpy.pi /4
+
+BLAmp = np.pi /4
 BLFreq = 1
 BLPhaseOffset = 0
 
@@ -9,7 +11,7 @@ FLFreq = 20
 FLPhaseOffset = 0
 
 length = 250
-start, end = 0, numpy.pi * 2
+start, end = 0, np.pi * 2
 
 sleepTimer = 1/60
 
@@ -19,13 +21,13 @@ numberOfGenerations = 1
 
 populationSize = 1
 
-numSensorNeurons = 6
+motorJointRange = 0.4
 
-numMotorNeurons = 5
+bodyNum = np.random.randint(low=3, high=6, size = 1)[0]
 
-motorJointRange = 0.8
+numSensorNeurons = bodyNum + 1
 
-bodyNum = 5
+numMotorNeurons = bodyNum
 
 maxHeight = 1
 
