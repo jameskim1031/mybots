@@ -19,3 +19,7 @@ The body is generated starting the from the head of the snake. The position of t
 The brain is generated using 2 for loops. One for loop iterates over to create the sensor neurons, while the other to create the motor neurons. The number of iteration of the each for loop is determined by keeping track of the cubes and joints being sent to pyrosim. It is also important to exclude the cubes that we randomly decide to not include.
 
 ## Diagram to help understand generating the body
+![327116947_710009484191220_2222516642722844365_n](https://user-images.githubusercontent.com/95663596/220276949-3c9fa871-0d03-45a0-91b7-bf047603e6f1.jpg)
+This diagram shows in high level how the snake body, arms, and legs are generated. The body grows along the x axis; the arm grows along the y axis; the leg grows along the z axis
+![327156150_736364211532701_4357122538420378307_n](https://user-images.githubusercontent.com/95663596/220276936-da5e378a-6b6b-4565-a5b5-67ba5c69a142.jpg)
+This diagram shows how the joint and cube positions are determined for different body part. The snake body's cube position is always relative to the previous joint position. The arm's position is relative to the arm's joint position which is located in the edge of the body and the arm. The leg's position is relative to the leg's join position which is located at the very end of the arm.
