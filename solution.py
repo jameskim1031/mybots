@@ -60,6 +60,7 @@ class SOLUTION:
 
             # choose whether we want 0, 1 or 2 arms
             randomization = np.random.randint(low=0, high=3, size = 1)[0]
+            randomization = 2
             if randomization == 0:
                 temp_joint = np.array([-(temp_size[0]), 0, 0])
             elif randomization == 1:
@@ -85,17 +86,6 @@ class SOLUTION:
                 else:
                     pyrosim.Send_Cube(name="Body" + str(sensor_count), pos=arm_position.tolist() , size=arm_size.tolist(), color_string= '    <color rgba="0 1.0 0.0 1.0"/>', color_name='Green')
                 sensor_count += 1
-                # # check if up and down
-                # leg = np.random.randint(low=0, high=3, size = 1)[0]
-                # if leg == 0:
-                #     pass
-                # elif leg == 1:
-                #     # add leg down
-                #     leg_joint = np.array([0, (arm_size[1]), 0])
-                #     leg_size = np.array([arm_size[0], (arm_size[1]) / 2, 0])
-                # else:
-                #     pass
-
             else:
                 #left arm
                 left_arm_size = np.array([np.random.random_sample() * temp_size[0] / 2, np.random.random_sample() * c.maxLength, np.random.random_sample() * temp_size[2]])
@@ -109,12 +99,22 @@ class SOLUTION:
                 else:
                     pyrosim.Send_Cube(name="Body" + str(sensor_count), pos= left_arm_position.tolist() , size=left_arm_size.tolist(), color_string= '    <color rgba="0 1.0 0.0 1.0"/>', color_name='Green')
                 sensor_count += 1
+
+                # left leg
+                left_leg_size = np.array([left_arm_size[0], (left_arm_size[1] / 2), (c.maxHeight / 2)])
+                left_leg_joint = np.array([0, - left_arm_size[1], 0])
+                left_leg_position = np.array([0, 0, -(left_leg_size[2] / 2)])
+                pyrosim.Send_Joint( name = "Body" + str(motor_count) + "_Body" + str(motor_count + 1) , parent= "Body" + str(motor_count) , child = "Body" + str(motor_count + 1), type = "revolute", position = left_leg_joint.tolist(), jointAxis = "0 0 1")
+                motor_count += 1
+                pyrosim.Send_Cube(name="Body" + str(sensor_count), pos=left_leg_position.tolist() , size=left_leg_size.tolist(), color_string= '    <color rgba="0 0.0 1.0 1.0"/>', color_name='Blue')
+                sensor_count += 1
+
                 #right arm
                 right_arm_size = np.array([np.random.random_sample() * temp_size[0] / 2, np.random.random_sample() * c.maxLength, np.random.random_sample() * temp_size[2]])
-                right_arm_joint = np.array([0, (temp_size[1]), 0])
+                right_arm_joint = np.array([0, (left_arm_size[1] + temp_size[1]), 0])
                 right_arm_position = np.array([0,(right_arm_size[1]) / 2, 0])
                 temp_joint = np.array([-(temp_size[0]) / 2, -(temp_size[1]) / 2, 0])
-                pyrosim.Send_Joint( name = "Body" + str(motor_count) + "_Body" + str(motor_count + 1) , parent= "Body" + str(motor_count) , child = "Body" + str(motor_count + 1), type = "revolute", position = right_arm_joint.tolist(), jointAxis = "0 1 0")
+                pyrosim.Send_Joint( name = "Body" + str(motor_count) + "_Body" + str(motor_count + 1) , parent= "Body" + str(motor_count) , child = "Body" + str(motor_count + 1), type = "revolute", position = right_arm_joint.tolist(), jointAxis = "0 0 1")
                 motor_count += 1
                 blue = np.random.randint(low=0, high=2, size = 1)[0]
                 if blue:
@@ -122,6 +122,16 @@ class SOLUTION:
                 else:
                     pyrosim.Send_Cube(name="Body" + str(sensor_count), pos= right_arm_position.tolist() , size=right_arm_size.tolist(), color_string= '    <color rgba="0 1.0 0.0 1.0"/>', color_name='Green')
                 sensor_count += 1
+
+                # right leg
+                right_leg_joint = np.array([0, right_arm_size[1],0])
+                right_leg_size = np.array([right_arm_size[0], (right_arm_size[1] / 2), c.maxHeight / 2])
+                right_leg_position = np.array([0,0,-(right_leg_size[2] / 2)])
+                pyrosim.Send_Joint( name = "Body" + str(motor_count) + "_Body" + str(motor_count + 1) , parent= "Body" + str(motor_count) , child = "Body" + str(motor_count + 1), type = "revolute", position = right_leg_joint.tolist(), jointAxis = "0 0 1")
+                motor_count += 1
+                pyrosim.Send_Cube(name="Body" + str(sensor_count), pos=right_leg_position.tolist() , size=right_leg_size.tolist(), color_string= '    <color rgba="0 0.0 1.0 1.0"/>', color_name='Blue')
+                sensor_count += 1
+                temp_joint = np.array([-(temp_size[0] / 2), -(right_arm_size[1] + (temp_size[1] / 2)),0])
 
         self.numMotors = motor_count
         self.numSensors = sensor_count
