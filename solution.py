@@ -51,14 +51,11 @@ class SOLUTION:
         sensor_count += 1
 
         parent = 0
-        print("start")
         self.jointList = []
         for i in range(c.bodyNum - 1):
-            # first iteration connects 0 and 1 then create 1
             pyrosim.Send_Joint( name = "Body" + str(parent) + "_Body" + str(sensor_count) , parent= "Body" + str(parent) , child = "Body" + str(sensor_count), type = "revolute", position = body_joint_pos, jointAxis = "0 1 0")
             motor_count += 1
             self.jointList.append([parent, sensor_count])
-            print(self.jointList)
             body = BODY(sensor_count, body_joint_pos, self.jointList)
             body.createBody()
             sensor_count += body.numSensors

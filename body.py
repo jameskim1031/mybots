@@ -17,12 +17,6 @@ class BODY:
 
         self.numMotors = 0
         self.numSensors = 0
-
-        self.numArms = np.random.randint(low=1, high=4, size = 1)[0]
-        print(self.numArms)
-        # 0 is no arms, 1 is left arm, 2 is right arm, 3 is both arms
-        self.numLegs = np.random.randint(low=0, high=3, size = 1)[0]
-        # 0 is no legs, 1 is down leg, 2 is up leg
     
     def createBody(self):
         # create one snake body
@@ -30,7 +24,7 @@ class BODY:
         body_pos = [-(body_size[0] / 2), 0, 0]
         pyrosim.Send_Cube(name="Body" + str(self.body_id), pos=body_pos , size=body_size, color_string= '    <color rgba="0 1.0 0.0 1.0"/>', color_name='Green')
         self.numSensors += 1
-
+        self.numArms = np.random.randint(low=1, high=4, size = 1)[0]
         if self.numArms == 0:
             self.joint_pos = [-(body_size[0]), 0, 0]
         elif self.numArms == 1:
@@ -67,7 +61,28 @@ class BODY:
     def createArm(self, joint, size, position, armID):
         pyrosim.Send_Joint( name = "Body" + str(self.body_id) + "_Body" + str(armID), parent= "Body" + str(self.body_id) , child = "Body" + str(armID), type = "revolute", position = joint, jointAxis = "0 0 1")
         self.jointList.append([self.body_id, armID])
-        print(self.jointList)
         self.numMotors += 1
         pyrosim.Send_Cube(name="Body" + str(armID), pos=position , size=size, color_string= '    <color rgba="0 1.0 0.0 1.0"/>', color_name='Green')
         self.numSensors += 1
+        self.numLegs = np.random.randint(low=0, high=3, size = 1)[0]
+        if self.numLegs == 0:
+            pass
+        elif self.numLegs == 1:
+            leg_joint = [0, position[1]*2, 0]
+            pyrosim.Send_Joint( name = "Body" + str(armID) + "_Body" + str(armID + 1), parent= "Body" + str(armID) , child = "Body" + str(armID + 1), type = "revolute", position = leg_joint, jointAxis = "0 0 1")
+            self.jointList.append([armID, armID + 1])
+            #print(self.jointList)
+            self.numMotors += 1
+            leg_size = [size[0], size[1] / 2,c.maxHeight / 4]
+            leg_position = [0,0,-(leg_size[2] / 2)]
+            pyrosim.Send_Cube(name="Body" + str(armID + 1), pos=leg_position , size=leg_size, color_string= '    <color rgba="0 1.0 0.0 1.0"/>', color_name='Green')
+            self.numSensors += 1
+        else:
+            leg_joint = [0, position[1]*2, 0]
+            pyrosim.Send_Joint( name = "Body" + str(armID) + "_Body" + str(armID + 1), parent= "Body" + str(armID) , child = "Body" + str(armID + 1), type = "revolute", position = leg_joint, jointAxis = "0 0 1")
+            self.jointList.append([armID, armID + 1])
+            self.numMotors += 1
+            leg_size = [size[0], size[1] / 2,c.maxHeight / 4]
+            leg_position = [0,0,(leg_size[2] / 2)]
+            pyrosim.Send_Cube(name="Body" + str(armID + 1), pos=leg_position , size=leg_size, color_string= '    <color rgba="0 1.0 0.0 1.0"/>', color_name='Green')
+            self.numSensors += 1

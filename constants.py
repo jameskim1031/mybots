@@ -21,7 +21,7 @@ numberOfGenerations = 1
 
 populationSize = 1
 
-motorJointRange = 0.6
+motorJointRange = 0.5
 
 bodyNum = 3
 # np.random.randint(low=3, high=5, size = 1)[0]
@@ -30,7 +30,7 @@ numSensorNeurons = bodyNum + 1
 
 numMotorNeurons = bodyNum
 
-maxHeight = 1
+maxHeight = 3
 
 maxWidth = 3
 
