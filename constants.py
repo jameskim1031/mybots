@@ -10,10 +10,10 @@ FLAmp = 4
 FLFreq = 20
 FLPhaseOffset = 0
 
-length = 250
+length = 500
 start, end = 0, np.pi * 2
 
-sleepTimer = 1/60
+sleepTimer = 1/90
 
 force = 30
 
