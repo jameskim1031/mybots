@@ -24,6 +24,7 @@ class BODY:
         body_pos = [-(body_size[0] / 2), 0, 0]
         pyrosim.Send_Cube(name="Body" + str(self.body_id), pos=body_pos , size=body_size, color_string= '    <color rgba="0 1.0 0.0 1.0"/>', color_name='Green')
         self.numSensors += 1
+        self.LinkedList.add(body_pos, body_size, body_joint_pos)
         self.numArms = np.random.randint(low=1, high=4, size = 1)[0]
         if self.numArms == 0:
             self.joint_pos = [-(body_size[0]), 0, 0]
@@ -63,6 +64,7 @@ class BODY:
         self.jointList.append([self.body_id, armID])
         self.numMotors += 1
         pyrosim.Send_Cube(name="Body" + str(armID), pos=position , size=size, color_string= '    <color rgba="0 1.0 0.0 1.0"/>', color_name='Green')
+        self.LinkedList.add(position, size, joint)
         self.numSensors += 1
         self.numLegs = np.random.randint(low=0, high=3, size = 1)[0]
         self.numLegs = 1
@@ -77,6 +79,7 @@ class BODY:
             leg_size = [size[0], size[1] / 2,c.maxHeight / 4]
             leg_position = [0,0,-(leg_size[2] / 2)]
             pyrosim.Send_Cube(name="Body" + str(armID + 1), pos=leg_position , size=leg_size, color_string= '    <color rgba="0 1.0 0.0 1.0"/>', color_name='Green')
+            self.LinkedList.add(leg_position, leg_size, leg_joint)
             self.numSensors += 1
         else:
             leg_joint = [0, position[1]*2, 0]
@@ -86,4 +89,5 @@ class BODY:
             leg_size = [size[0], size[1] / 2,c.maxHeight / 4]
             leg_position = [0,0,(leg_size[2] / 2)]
             pyrosim.Send_Cube(name="Body" + str(armID + 1), pos=leg_position , size=leg_size, color_string= '    <color rgba="0 1.0 0.0 1.0"/>', color_name='Green')
+            self.LinkedList.add(leg_position, leg_size, leg_joint)
             self.numSensors += 1

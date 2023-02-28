@@ -5,6 +5,7 @@ import random
 import time
 import constants as c
 from body import BODY
+from LinkedList import LinkedList
 
 class SOLUTION:
     def __init__(self, nextAvailableID):
@@ -17,7 +18,7 @@ class SOLUTION:
         self.chooseSensors = np.random.randint(low=0, high=c.bodyNum, size = 1)[0]
         self.chosenSensors = np.random.choice(c.bodyNum + 1, self.chooseSensors, replace=False)
         self.jointList = []
-        self.increment = 0
+        self.LinkedList = LinkedList()
         
     def Start_Simulation(self, directOrGUI):
         self.Create_World()
@@ -48,6 +49,7 @@ class SOLUTION:
         
         pyrosim.Send_Cube(name="Body0", pos=initial_pos, size=initial_size, color_string= '    <color rgba="0 0.0 1.0 1.0"/>', color_name='Blue')
         sensor_count += 1
+        self.LinkedList.add(initial_pos, initial_size, body_joint_pos)
         
 
         parent = 0
@@ -90,12 +92,11 @@ class SOLUTION:
         pyrosim.End()
 
     def Mutate(self):
-        print("mutate")
-        print(self.numSensors)
-        print(len(self.jointList))
-        print(self.weights)
+        self.LinkedList.Generate_Body_Using_LinkedList()
+        self.numSensors += 1
+        self.numMotors += 1
         randomRow = random.randint(0, self.numSensors - 2)
-        randomColumn = random.randint(0, len(self.jointList) - 2)
+        randomColumn = random.randint(0, self.numMotors - 2)
         self.weights[randomRow][randomColumn] = (random.random() * 2) - 1
 
     def Set_ID(self, nextAvailableID):
