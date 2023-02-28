@@ -11,13 +11,14 @@ import constants as c
 class ROBOT:
     def __init__(self, solutionID):
         self.motors = {}
-        self.robotId = p.loadURDF("body.urdf")
+        self.robotId = p.loadURDF("body" + str(solutionID) + ".nndf")
         pyrosim.Prepare_To_Simulate(self.robotId)
         self.Prepare_To_Sense()
         self.Prepare_To_Act()
         self.solutionID = solutionID
         self.nn = NEURAL_NETWORK("brain" + self.solutionID +".nndf")
         os.system("del brain" + str(self.solutionID) + ".nndf")
+        os.system("del body" + str(self.solutionID) + ".nndf")
         
 
     def Prepare_To_Sense(self):

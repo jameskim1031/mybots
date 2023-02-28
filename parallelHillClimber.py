@@ -19,6 +19,7 @@ class PARALLEL_HILL_CLIMBER:
     def Evolve(self):
         self.Evaluate(self.parents)
         for currentGeneration in range(c.numberOfGenerations):
+            print("currentGeneration" + str(currentGeneration))
             self.Evolve_For_One_Generation()
 
     
@@ -30,7 +31,7 @@ class PARALLEL_HILL_CLIMBER:
         self.Evaluate(self.children)
 
         self.Print()
-
+        print("hey")
         self.Select()
 
     # At the end of Spawn(), print each entry in self.children and then exit() immediately. Run search.py; you should see two SOLUTION's printed.

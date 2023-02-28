@@ -59,12 +59,13 @@ class BODY:
             self.joint_pos = [-(body_size[0]),0, 0]
 
     def createArm(self, joint, size, position, armID):
-        pyrosim.Send_Joint( name = "Body" + str(self.body_id) + "_Body" + str(armID), parent= "Body" + str(self.body_id) , child = "Body" + str(armID), type = "revolute", position = joint, jointAxis = "0 0 1")
+        pyrosim.Send_Joint( name = "Body" + str(self.body_id) + "_Body" + str(armID), parent= "Body" + str(self.body_id) , child = "Body" + str(armID), type = "revolute", position = joint, jointAxis = "0 1 0")
         self.jointList.append([self.body_id, armID])
         self.numMotors += 1
         pyrosim.Send_Cube(name="Body" + str(armID), pos=position , size=size, color_string= '    <color rgba="0 1.0 0.0 1.0"/>', color_name='Green')
         self.numSensors += 1
         self.numLegs = np.random.randint(low=0, high=3, size = 1)[0]
+        self.numLegs = 1
         if self.numLegs == 0:
             pass
         elif self.numLegs == 1:

@@ -10,7 +10,7 @@ FLAmp = 4
 FLFreq = 20
 FLPhaseOffset = 0
 
-length = 500
+length = 2000
 start, end = 0, np.pi * 2
 
 sleepTimer = 1/90
@@ -23,8 +23,7 @@ populationSize = 1
 
 motorJointRange = 0.5
 
-bodyNum = 3
-# np.random.randint(low=3, high=5, size = 1)[0]
+bodyNum = np.random.randint(low=2, high=4, size = 1)[0]
 
 numSensorNeurons = bodyNum + 1
 
