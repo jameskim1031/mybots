@@ -15,13 +15,13 @@ start, end = 0, np.pi * 2
 
 sleepTimer = 1/60
 
-force = 30
+force = 100
 
 numberOfGenerations = 1
 
 populationSize = 1
 
-motorJointRange = 0.4
+motorJointRange = 0.6
 
 bodyNum = np.random.randint(low=3, high=6, size = 1)[0]
 
@@ -31,6 +31,6 @@ numMotorNeurons = bodyNum
 
 maxHeight = 1
 
-maxWidth = 3
+maxWidth = 1
 
-maxLength = 2
+maxLength = 1
