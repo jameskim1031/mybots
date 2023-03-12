@@ -10,14 +10,14 @@ FLAmp = 4
 FLFreq = 20
 FLPhaseOffset = 0
 
-length = 250
+length = 1000
 start, end = 0, np.pi * 2
 
 sleepTimer = 1/60
 
 force = 100
 
-numberOfGenerations = 1
+numberOfGenerations = 3
 
 populationSize = 1
 
@@ -29,8 +29,8 @@ numSensorNeurons = bodyNum + 1
 
 numMotorNeurons = bodyNum
 
-maxHeight = 1
+maxHeight = 2
 
-maxWidth = 1
+maxWidth = 2
 
-maxLength = 1
+maxLength = 2

@@ -18,7 +18,7 @@ class ROBOT:
         self.solutionID = solutionID
         self.nn = NEURAL_NETWORK("brain" + self.solutionID +".nndf")
         os.system("del brain" + str(self.solutionID) + ".nndf")
-        #os.system("del body" + str(self.solutionID) + ".nndf")
+        os.system("del body" + str(self.solutionID) + ".nndf")
         
 
     def Prepare_To_Sense(self):
@@ -50,10 +50,9 @@ class ROBOT:
         basePositionAndOrientation = p.getBasePositionAndOrientation(self.robotId)
         basePosition = basePositionAndOrientation[0]
         xPosition = basePosition[0]
-        zPosition = basePosition[2]
 
         f = open("tmp" + self.solutionID + ".txt", "w")
-        f.write(str(xPosition - zPosition))
+        f.write(str(xPosition))
         f.close()
         
         os.system("rename tmp" + self.solutionID + ".txt fitness" + self.solutionID + ".txt")
