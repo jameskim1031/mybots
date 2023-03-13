@@ -17,8 +17,11 @@ class SOLUTION:
         self.motors = []
         self.everything = []
         self.partsToAdd = {}
+        self.partsToRemove = {}
         self.totalPartsToAdd = 0
         self.getEverything()
+        # make self.weights here
+        ############ TEST MUTATION AGAIN ###########
         
     def Start_Simulation(self, directOrGUI):
         self.Create_World()
@@ -62,23 +65,27 @@ class SOLUTION:
                 if self.currentPartCount == self.totalPartNum:
                     left_arm_joint = np.array([0, -(spine_size[1] / 2), spine_pos[2]])
                     right_arm_joint = np.array([0, (spine_size[1] / 2), spine_pos[2]])
-                    self.partsToAdd[spine_name + "_leftArm"] = ["arm", "left", self.spineID, left_arm_joint]
+                    self.partsToAdd[spine_name + "_leftArm"] = ["arm", "left", self.spineID, spine_size, left_arm_joint]
                     self.totalPartsToAdd += 1
-                    self.partsToAdd[spine_name + "_rightArm"] = ["arm", "right", self.spineID, right_arm_joint]
+                    self.partsToAdd[spine_name + "_rightArm"] = ["arm", "right", self.spineID, spine_size, right_arm_joint]
                     self.totalPartsToAdd += 1
                     break
 
                 armChoice = np.random.randint(low=0, high=4, size = 1)[0]
-                print("armChoice")
-                print(armChoice)
                 ## NO ARMS ##
                 if armChoice == 0:
+                    left_arm_joint = np.array([0, -(spine_size[1] / 2), spine_pos[2]])
+                    right_arm_joint = np.array([0, (spine_size[1] / 2), spine_pos[2]])
+                    self.partsToAdd[spine_name + "_leftArm"] = ["arm", "left", self.spineID, spine_size, left_arm_joint]
+                    self.totalPartsToAdd += 1
+                    self.partsToAdd[spine_name + "_rightArm"] = ["arm", "right", self.spineID, spine_size, right_arm_joint]
+                    self.totalPartsToAdd += 1
                     self.spineID += 1
                 # ONLY LEFT ARM ##
                 elif armChoice == 1:
                     # if we are creating a left arm, then we must add right arm to partsToAdd
                     right_arm_joint = np.array([0, (spine_size[1] / 2), spine_pos[2]])
-                    self.partsToAdd[spine_name + "_rightArm"] = ["arm", "right", self.spineID, right_arm_joint]
+                    self.partsToAdd[spine_name + "_rightArm"] = ["arm", "right", self.spineID, spine_size, right_arm_joint]
                     self.totalPartsToAdd += 1
                     joint_pos = np.array([0, -(spine_size[1] / 2), spine_pos[2]])
                     joint_name = spine_name + "_arm" + str(self.armID)
@@ -105,7 +112,7 @@ class SOLUTION:
                 ## ONLY RIGHT ARM ##
                 elif armChoice == 2:
                     left_arm_joint = np.array([0, -(spine_size[1] / 2), spine_pos[2]])
-                    self.partsToAdd[spine_name + "_leftArm"] = ["arm", "left", self.spineID, left_arm_joint]
+                    self.partsToAdd[spine_name + "_leftArm"] = ["arm", "left", self.spineID, spine_size, left_arm_joint]
                     self.totalPartsToAdd += 1
                     joint_pos = np.array([0, (spine_size[1] / 2), spine_pos[2]])
                     joint_name = spine_name + "_arm" + str(self.armID)
@@ -204,21 +211,27 @@ class SOLUTION:
                 
                 ##### ARMS #####
                 if self.currentPartCount == self.totalPartNum:
-                    left_arm_joint = np.array([0, -(spine_size[1] / 2), spine_pos[2]])
-                    right_arm_joint = np.array([0, (spine_size[1] / 2), spine_pos[2]])
-                    self.partsToAdd[spine_name + "_leftArm"] = ["arm", "left", self.spineID, left_arm_joint]
+                    left_arm_joint = np.array([-(spine_size[0] / 2), -(spine_size[1] / 2), spine_pos[2]])
+                    right_arm_joint = np.array([-(spine_size[0] / 2), (spine_size[1] / 2), spine_pos[2]])
+                    self.partsToAdd[spine_name + "_leftArm"] = ["arm", "left", self.spineID, spine_size, left_arm_joint]
                     self.totalPartsToAdd += 1
-                    self.partsToAdd[spine_name + "_rightArm"] = ["arm", "right", self.spineID, right_arm_joint]
+                    self.partsToAdd[spine_name + "_rightArm"] = ["arm", "right", self.spineID, spine_size, right_arm_joint]
                     self.totalPartsToAdd += 1
                     break
                 armChoice = np.random.randint(low=0, high=4, size = 1)[0]
                 ## NO ARMS ##
                 if armChoice == 0:
+                    left_arm_joint = np.array([-(spine_size[0] / 2), -(spine_size[1] / 2), spine_pos[2]])
+                    right_arm_joint = np.array([-(spine_size[0] / 2), (spine_size[1] / 2), spine_pos[2]])
+                    self.partsToAdd[spine_name + "_leftArm"] = ["arm", "left", self.spineID, spine_size, left_arm_joint]
+                    self.totalPartsToAdd += 1
+                    self.partsToAdd[spine_name + "_rightArm"] = ["arm", "right", self.spineID, spine_size, right_arm_joint]
+                    self.totalPartsToAdd += 1
                     self.spineID += 1
                 # ONLY LEFT ARM ##
                 elif armChoice == 1:
-                    right_arm_joint = np.array([0, (spine_size[1] / 2), spine_pos[2]])
-                    self.partsToAdd[spine_name + "_rightArm"] = ["arm", "right", self.spineID, right_arm_joint]
+                    right_arm_joint = np.array([-(spine_size[0] / 2), (spine_size[1] / 2), spine_pos[2]])
+                    self.partsToAdd[spine_name + "_rightArm"] = ["arm", "right", self.spineID, spine_size, right_arm_joint]
                     self.totalPartsToAdd += 1
                     joint_pos = np.array([-(spine_size[0] / 2), -(spine_size[1] / 2), spine_pos[2]])
                     joint_name = spine_name + "_arm" + str(self.armID)
@@ -244,8 +257,8 @@ class SOLUTION:
                     
                 ## ONLY RIGHT ARM ##
                 elif armChoice == 2:
-                    left_arm_joint = np.array([0, -(spine_size[1] / 2), spine_pos[2]])
-                    self.partsToAdd[spine_name + "_leftArm"] = ["arm", "left", self.spineID, left_arm_joint]
+                    left_arm_joint = np.array([-(spine_size[0] / 2), -(spine_size[1] / 2), spine_pos[2]])
+                    self.partsToAdd[spine_name + "_leftArm"] = ["arm", "left", self.spineID, spine_size, left_arm_joint]
                     self.totalPartsToAdd += 1
                     joint_pos = np.array([-(spine_size[0] / 2), (spine_size[1] / 2), spine_pos[2]])
                     joint_name = spine_name + "_arm" + str(self.armID)
@@ -321,28 +334,34 @@ class SOLUTION:
             joint_pos = np.array([0, -(arm_size[1]), 0])
         else:
             joint_pos = np.array([0, (arm_size[1]), 0])
+
         if self.currentPartCount == self.totalPartNum:
             arm_name = "arm" + str(self.armID)
-            self.partsToAdd[arm_name + "_lowerLeg"] = ["leg", "lowerLeg", self.armID, joint_pos]
+            self.partsToAdd[arm_name + "_lowerLeg"] = ["leg", "lowerLeg", self.armID, arm_size, joint_pos]
             self.totalPartsToAdd += 1
-            self.partsToAdd[arm_name + "_upperLeg"] = ["leg", "upperLeg", self.armID, joint_pos]
+            self.partsToAdd[arm_name + "_upperLeg"] = ["leg", "upperLeg", self.armID, arm_size, joint_pos]
             self.totalPartsToAdd += 1
             return False
 
         legChoice = np.random.randint(low=0, high=3, size = 1)[0]
 
         if legChoice == 0:
+            arm_name = "arm" + str(self.armID)
+            self.partsToAdd[arm_name + "_lowerLeg"] = ["leg", "lowerLeg", self.armID, arm_size, joint_pos]
+            self.totalPartsToAdd += 1
+            self.partsToAdd[arm_name + "_upperLeg"] = ["leg", "upperLeg", self.armID, arm_size, joint_pos]
+            self.totalPartsToAdd += 1
             return True
         else:
             leg_size = np.array([np.maximum(0.75,np.random.random_sample()) * arm_size[0], np.maximum(0.75,np.random.random_sample()) * arm_size[1], np.maximum(0.1,np.random.random_sample()) * c.maxHeight])
             if legChoice == 1:
                 arm_name = "arm" + str(self.armID)
-                self.partsToAdd[arm_name + "_upperLeg"] = ["leg", "upper", self.armID, joint_pos]
+                self.partsToAdd[arm_name + "_upperLeg"] = ["leg", "upper", self.armID, arm_size, joint_pos]
                 leg_pos = np.array([0, 0, -(leg_size[2] / 2)])
                 self.totalPartsToAdd += 1
             else:
                 arm_name = "arm" + str(self.armID)
-                self.partsToAdd[arm_name + "_lowerLeg"] = ["leg", "lower", self.armID, joint_pos]
+                self.partsToAdd[arm_name + "_lowerLeg"] = ["leg", "lower", self.armID, arm_size, joint_pos]
                 leg_pos = np.array([0, 0, (leg_size[2] / 2)])
                 self.totalPartsToAdd += 1
             joint_name = "arm" + str(self.armID) + "_leg" + str(self.legID)
@@ -373,6 +392,7 @@ class SOLUTION:
 
     def Generate_Brain(self):
         pyrosim.Start_NeuralNetwork("brain" + str(self.myID) + ".nndf")
+        #### FIX THIS PART ####
         self.weights = np.random.rand(len(self.sensors),len(self.motors))
         self.weights = self.weights * 2 - 1
         name = 0
@@ -390,16 +410,55 @@ class SOLUTION:
         
         pyrosim.End()
 
-    def Mutate(self):
-        print("everything")
-        print(self.everything)
+    def Mutate(self): 
         print("parts to add")
-        print(self.partsToAdd)       
-        print("total part")
-        print(self.totalPartsToAdd) 
-        randomRow = random.randint(0, len(self.sensors) - 1)
-        randomColumn = random.randint(0, len(self.motors) - 1)
-        self.weights[randomRow,randomColumn] = (random.random() * 2) - 1
+        print(self.partsToAdd)      
+        partToAdd, detail = random.choice(list(self.partsToAdd.items()))
+        print("part to add")
+        print([partToAdd, detail])
+        
+        if detail[0] == 'leg':
+            print("adding leg")
+            leg_size = np.array([np.maximum(0.75,np.random.random_sample()) * detail[3][0], np.maximum(0.75,np.random.random_sample()) * detail[3][1], np.maximum(0.1,np.random.random_sample()) * c.maxHeight])
+            if detail[1] == 'upper':
+                leg_pos = np.array([0, 0, (leg_size[2] / 2)])
+            else:
+                leg_pos = np.array([0, 0, -(leg_size[2] / 2)])
+            
+            joint_name = "arm" + str(detail[2]) + "_leg" + str(self.legID)
+            parent_name = "arm" + str(detail[2])
+            child_name = "leg" + str(self.legID)
+            self.everything.append([joint_name, parent_name, child_name, detail[4], "joint"])
+            self.motors.append(joint_name)
+            leg_name = "leg" + str(self.legID)
+            self.everything.append([leg_name, leg_pos, leg_size, "cube"])
+            self.sensors.append(leg_name)
+            self.legID += 1
+            del self.partsToAdd[partToAdd]
+        elif detail[0] == 'arm':
+            print("adding arm")
+            arm_size = np.array([np.maximum(0.3,np.random.random_sample()) * detail[3][0], np.maximum(0.3,np.random.random_sample()) * detail[3][1], np.maximum(0.3,np.random.random_sample()) *  detail[3][2]])
+            if detail[1] == 'left':
+                arm_pos = np.array([0, -arm_size[1] / 2, 0])
+            else:
+                arm_pos = np.array([0, arm_size[1] / 2, 0])
+            
+            joint_name = "spine" + str(detail[2]) + "_arm" + str(self.armID)
+            parent_name = "spine" + str(detail[2])
+            child_name = "arm" + str(self.armID)
+
+            self.everything.append([joint_name, parent_name, child_name, detail[4], "joint"])
+            self.motors.append(joint_name)
+            arm_name = "arm" + str(self.armID)
+            self.everything.append([arm_name, arm_pos, arm_size, "cube"])
+            self.sensors.append(arm_name)
+            self.armID += 1
+            del self.partsToAdd[partToAdd]
+        else:
+            randomRow = random.randint(0, len(self.sensors) - 1)
+            randomColumn = random.randint(0, len(self.motors) - 1)
+            self.weights[randomRow,randomColumn] = (random.random() * 2) - 1
+
         
 
     def Set_ID(self, nextAvailableID):
