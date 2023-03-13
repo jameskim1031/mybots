@@ -8,7 +8,7 @@ import constants as c
 class SOLUTION:
     def __init__(self, nextAvailableID):
         self.myID = nextAvailableID
-        self.totalPartNum = 4
+        self.totalPartNum = 8
         self.currentPartCount = 0
         self.spineID = 0
         self.armID = 0
@@ -20,8 +20,8 @@ class SOLUTION:
         self.partsToRemove = {}
         self.totalPartsToAdd = 0
         self.getEverything()
-        # make self.weights here
-        ############ TEST MUTATION AGAIN ###########
+        self.weights = np.random.rand(len(self.sensors),len(self.motors))
+        self.weights = self.weights * 2 - 1
         
     def Start_Simulation(self, directOrGUI):
         self.Create_World()
@@ -249,6 +249,7 @@ class SOLUTION:
                     #     break
                     # ADD LEG #
                     if not self.addLegs(arm_size, "left"):
+                        self.armID += 1
                         break
                     self.armID += 1
                     self.spineID += 1
@@ -276,6 +277,7 @@ class SOLUTION:
                     #     break
                     # ADD LEG #
                     if not self.addLegs(arm_size, "right"):
+                        self.armID += 1
                         break
                     self.spineID += 1
                     self.armID += 1
@@ -324,6 +326,7 @@ class SOLUTION:
                     
                    # ADD RIGHT LEG #
                     if not self.addLegs(arm_size, "right"):
+                        self.armID += 1
                         break
                     self.armID += 1
                     if self.currentPartCount == self.totalPartNum:
@@ -393,8 +396,7 @@ class SOLUTION:
     def Generate_Brain(self):
         pyrosim.Start_NeuralNetwork("brain" + str(self.myID) + ".nndf")
         #### FIX THIS PART ####
-        self.weights = np.random.rand(len(self.sensors),len(self.motors))
-        self.weights = self.weights * 2 - 1
+        
         name = 0
         for sensor in self.sensors:
             pyrosim.Send_Sensor_Neuron(name = name , linkName = sensor)
@@ -411,54 +413,66 @@ class SOLUTION:
         pyrosim.End()
 
     def Mutate(self): 
-        print("parts to add")
-        print(self.partsToAdd)      
-        partToAdd, detail = random.choice(list(self.partsToAdd.items()))
-        print("part to add")
-        print([partToAdd, detail])
+        mutateChoice = np.random.randint(low=0, high=2, size = 1)[0]
         
-        if detail[0] == 'leg':
-            print("adding leg")
-            leg_size = np.array([np.maximum(0.75,np.random.random_sample()) * detail[3][0], np.maximum(0.75,np.random.random_sample()) * detail[3][1], np.maximum(0.1,np.random.random_sample()) * c.maxHeight])
-            if detail[1] == 'upper':
-                leg_pos = np.array([0, 0, (leg_size[2] / 2)])
-            else:
-                leg_pos = np.array([0, 0, -(leg_size[2] / 2)])
-            
-            joint_name = "arm" + str(detail[2]) + "_leg" + str(self.legID)
-            parent_name = "arm" + str(detail[2])
-            child_name = "leg" + str(self.legID)
-            self.everything.append([joint_name, parent_name, child_name, detail[4], "joint"])
-            self.motors.append(joint_name)
-            leg_name = "leg" + str(self.legID)
-            self.everything.append([leg_name, leg_pos, leg_size, "cube"])
-            self.sensors.append(leg_name)
-            self.legID += 1
-            del self.partsToAdd[partToAdd]
-        elif detail[0] == 'arm':
-            print("adding arm")
-            arm_size = np.array([np.maximum(0.3,np.random.random_sample()) * detail[3][0], np.maximum(0.3,np.random.random_sample()) * detail[3][1], np.maximum(0.3,np.random.random_sample()) *  detail[3][2]])
-            if detail[1] == 'left':
-                arm_pos = np.array([0, -arm_size[1] / 2, 0])
-            else:
-                arm_pos = np.array([0, arm_size[1] / 2, 0])
-            
-            joint_name = "spine" + str(detail[2]) + "_arm" + str(self.armID)
-            parent_name = "spine" + str(detail[2])
-            child_name = "arm" + str(self.armID)
-
-            self.everything.append([joint_name, parent_name, child_name, detail[4], "joint"])
-            self.motors.append(joint_name)
-            arm_name = "arm" + str(self.armID)
-            self.everything.append([arm_name, arm_pos, arm_size, "cube"])
-            self.sensors.append(arm_name)
-            self.armID += 1
-            del self.partsToAdd[partToAdd]
-        else:
+        if mutateChoice == 0:
+            print("changing synapse")
+            # simply change one of the synapse
             randomRow = random.randint(0, len(self.sensors) - 1)
             randomColumn = random.randint(0, len(self.motors) - 1)
             self.weights[randomRow,randomColumn] = (random.random() * 2) - 1
+        else:
+            # add another part
+            new_row = (np.random.rand(1, self.weights.shape[1]) * 2) - 1
+            self.weights = np.vstack([self.weights, new_row])
+            new_col = (np.random.rand(self.weights.shape[0], 1) * 2) - 1
+            self.weights = np.hstack([self.weights, new_col])
 
+            partToAdd, detail = random.choice(list(self.partsToAdd.items()))        
+            if detail[0] == 'leg':
+                print("adding leg")
+                leg_size = np.array([np.maximum(0.75,np.random.random_sample()) * detail[3][0], np.maximum(0.75,np.random.random_sample()) * detail[3][1], np.maximum(0.1,np.random.random_sample()) * c.maxHeight])
+                if detail[1] == 'upper':
+                    leg_pos = np.array([0, 0, (leg_size[2] / 2)])
+                else:
+                    leg_pos = np.array([0, 0, -(leg_size[2] / 2)])
+                
+                joint_name = "arm" + str(detail[2]) + "_leg" + str(self.legID)
+                parent_name = "arm" + str(detail[2])
+                child_name = "leg" + str(self.legID)
+                self.everything.append([joint_name, parent_name, child_name, detail[4], "joint"])
+                self.motors.append(joint_name)
+                leg_name = "leg" + str(self.legID)
+                self.everything.append([leg_name, leg_pos, leg_size, "cube"])
+                self.sensors.append(leg_name)
+                self.legID += 1
+                del self.partsToAdd[partToAdd]
+            elif detail[0] == 'arm':
+                print("adding arm")
+                arm_size = np.array([np.maximum(0.3,np.random.random_sample()) * detail[3][0], np.maximum(0.3,np.random.random_sample()) * detail[3][1], np.maximum(0.3,np.random.random_sample()) *  detail[3][2]])
+                if detail[1] == 'left':
+                    arm_pos = np.array([0, -arm_size[1] / 2, 0])
+                else:
+                    arm_pos = np.array([0, arm_size[1] / 2, 0])
+                
+                joint_name = "spine" + str(detail[2]) + "_arm" + str(self.armID)
+                parent_name = "spine" + str(detail[2])
+                child_name = "arm" + str(self.armID)
+
+                self.everything.append([joint_name, parent_name, child_name, detail[4], "joint"])
+                self.motors.append(joint_name)
+                arm_name = "arm" + str(self.armID)
+                self.everything.append([arm_name, arm_pos, arm_size, "cube"])
+                self.sensors.append(arm_name)
+                # add legs to partsToAdd
+
+                # self.partsToAdd[arm_name + "_lowerLeg"] = ["leg", "lowerLeg", self.armID, arm_size, joint_pos]
+                # self.totalPartsToAdd += 1
+                # self.partsToAdd[arm_name + "_upperLeg"] = ["leg", "upperLeg", self.armID, arm_size, joint_pos]
+                # self.totalPartsToAdd += 1
+
+                self.armID += 1
+                del self.partsToAdd[partToAdd]
         
 
     def Set_ID(self, nextAvailableID):

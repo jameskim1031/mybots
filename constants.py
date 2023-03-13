@@ -17,7 +17,7 @@ sleepTimer = 1/60
 
 force = 100
 
-numberOfGenerations = 2
+numberOfGenerations = 10
 
 populationSize = 1
 
