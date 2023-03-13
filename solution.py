@@ -332,6 +332,7 @@ class SOLUTION:
         pyrosim.End()
 
     def Mutate(self):
+        print("everything")
         print(self.everything)        
         randomRow = random.randint(0, len(self.sensors) - 1)
         randomColumn = random.randint(0, len(self.motors) - 1)
