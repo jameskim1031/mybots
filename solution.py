@@ -16,6 +16,8 @@ class SOLUTION:
         self.sensors = []
         self.motors = []
         self.everything = []
+        self.partsToAdd = {}
+        self.totalPartsToAdd = 0
         self.getEverything()
         
     def Start_Simulation(self, directOrGUI):
@@ -53,16 +55,31 @@ class SOLUTION:
                 self.everything.append([spine_name, spine_pos, spine_size, "cube"])
                 self.sensors.append(spine_name)
                 self.currentPartCount += 1
-                if self.currentPartCount == self.totalPartNum:
-                    break
+                # if self.currentPartCount == self.totalPartNum:
+                #     break
 
                 ##### ARMS #####
+                if self.currentPartCount == self.totalPartNum:
+                    left_arm_joint = np.array([0, -(spine_size[1] / 2), spine_pos[2]])
+                    right_arm_joint = np.array([0, (spine_size[1] / 2), spine_pos[2]])
+                    self.partsToAdd[spine_name + "_leftArm"] = ["arm", "left", self.spineID, left_arm_joint]
+                    self.totalPartsToAdd += 1
+                    self.partsToAdd[spine_name + "_rightArm"] = ["arm", "right", self.spineID, right_arm_joint]
+                    self.totalPartsToAdd += 1
+                    break
+
                 armChoice = np.random.randint(low=0, high=4, size = 1)[0]
+                print("armChoice")
+                print(armChoice)
                 ## NO ARMS ##
                 if armChoice == 0:
                     self.spineID += 1
                 # ONLY LEFT ARM ##
                 elif armChoice == 1:
+                    # if we are creating a left arm, then we must add right arm to partsToAdd
+                    right_arm_joint = np.array([0, (spine_size[1] / 2), spine_pos[2]])
+                    self.partsToAdd[spine_name + "_rightArm"] = ["arm", "right", self.spineID, right_arm_joint]
+                    self.totalPartsToAdd += 1
                     joint_pos = np.array([0, -(spine_size[1] / 2), spine_pos[2]])
                     joint_name = spine_name + "_arm" + str(self.armID)
                     # pyrosim.Send_Joint( name = joint_name , parent= spine_name , child = "arm" + str(self.armID), type = "revolute", position = joint_pos.tolist(), jointAxis = "0 1 0")
@@ -75,10 +92,11 @@ class SOLUTION:
                     self.everything.append([arm_name, arm_pos, arm_size, "cube"])
                     self.sensors.append(arm_name)
                     self.currentPartCount += 1
-                    if self.currentPartCount == self.totalPartNum:
-                        break
+                    # if self.currentPartCount == self.totalPartNum:
+                    #     break
                     # ADD LEG #
-                    self.addLegs(arm_size, "left")
+                    if not self.addLegs(arm_size, "left"):
+                        break
                     self.armID += 1
                     self.spineID += 1
                     if self.currentPartCount == self.totalPartNum:
@@ -86,6 +104,9 @@ class SOLUTION:
                     
                 ## ONLY RIGHT ARM ##
                 elif armChoice == 2:
+                    left_arm_joint = np.array([0, -(spine_size[1] / 2), spine_pos[2]])
+                    self.partsToAdd[spine_name + "_leftArm"] = ["arm", "left", self.spineID, left_arm_joint]
+                    self.totalPartsToAdd += 1
                     joint_pos = np.array([0, (spine_size[1] / 2), spine_pos[2]])
                     joint_name = spine_name + "_arm" + str(self.armID)
                     # pyrosim.Send_Joint( name = joint_name , parent= spine_name , child = "arm" + str(self.armID), type = "revolute", position = joint_pos.tolist(), jointAxis = "0 1 0")
@@ -98,10 +119,11 @@ class SOLUTION:
                     self.everything.append([arm_name, arm_pos, arm_size, "cube"])
                     self.sensors.append(arm_name)
                     self.currentPartCount += 1
-                    if self.currentPartCount == self.totalPartNum:
-                        break
+                    # if self.currentPartCount == self.totalPartNum:
+                    #     break
                     # ADD LEG #
-                    self.addLegs(arm_size, "right")
+                    if not self.addLegs(arm_size, "right"):
+                        break
                     self.spineID += 1
                     self.armID += 1
                     if self.currentPartCount == self.totalPartNum:
@@ -121,10 +143,11 @@ class SOLUTION:
                     self.everything.append([arm_name, arm_pos, arm_size, "cube"])
                     self.sensors.append(arm_name)
                     self.currentPartCount += 1
-                    if self.currentPartCount == self.totalPartNum:
-                        break
+                    # if self.currentPartCount == self.totalPartNum:
+                    #     break
                     # ADD LEFT LEG #
-                    self.addLegs(arm_size, "left")
+                    if not self.addLegs(arm_size, "left"):
+                        break
                     self.armID += 1
                     if self.currentPartCount == self.totalPartNum:
                         break
@@ -143,11 +166,12 @@ class SOLUTION:
                     self.sensors.append(arm_name)
                     self.currentPartCount += 1
                     self.spineID += 1
-                    if self.currentPartCount == self.totalPartNum:
-                        break 
+                    # if self.currentPartCount == self.totalPartNum:
+                    #     break 
                     
                    # ADD RIGHT LEG #
-                    self.addLegs(arm_size, "right")
+                    if not self.addLegs(arm_size, "right"):
+                        break
                     self.armID += 1
                     if self.currentPartCount == self.totalPartNum:
                         break
@@ -175,16 +199,27 @@ class SOLUTION:
                 self.everything.append([spine_name, spine_pos, spine_size, "cube"])
                 self.sensors.append(spine_name)
                 self.currentPartCount += 1
-                if self.currentPartCount == self.totalPartNum:
-                    break
+                # if self.currentPartCount == self.totalPartNum:
+                #     break
                 
                 ##### ARMS #####
+                if self.currentPartCount == self.totalPartNum:
+                    left_arm_joint = np.array([0, -(spine_size[1] / 2), spine_pos[2]])
+                    right_arm_joint = np.array([0, (spine_size[1] / 2), spine_pos[2]])
+                    self.partsToAdd[spine_name + "_leftArm"] = ["arm", "left", self.spineID, left_arm_joint]
+                    self.totalPartsToAdd += 1
+                    self.partsToAdd[spine_name + "_rightArm"] = ["arm", "right", self.spineID, right_arm_joint]
+                    self.totalPartsToAdd += 1
+                    break
                 armChoice = np.random.randint(low=0, high=4, size = 1)[0]
                 ## NO ARMS ##
                 if armChoice == 0:
                     self.spineID += 1
                 # ONLY LEFT ARM ##
                 elif armChoice == 1:
+                    right_arm_joint = np.array([0, (spine_size[1] / 2), spine_pos[2]])
+                    self.partsToAdd[spine_name + "_rightArm"] = ["arm", "right", self.spineID, right_arm_joint]
+                    self.totalPartsToAdd += 1
                     joint_pos = np.array([-(spine_size[0] / 2), -(spine_size[1] / 2), spine_pos[2]])
                     joint_name = spine_name + "_arm" + str(self.armID)
                     # pyrosim.Send_Joint( name = joint_name , parent= spine_name , child = "arm" + str(self.armID), type = "revolute", position = joint_pos.tolist(), jointAxis = "0 1 0")
@@ -197,10 +232,11 @@ class SOLUTION:
                     self.everything.append([arm_name, arm_pos, arm_size, "cube"])
                     self.sensors.append(arm_name)
                     self.currentPartCount += 1
-                    if self.currentPartCount == self.totalPartNum:
-                        break
+                    # if self.currentPartCount == self.totalPartNum:
+                    #     break
                     # ADD LEG #
-                    self.addLegs(arm_size, "left")
+                    if not self.addLegs(arm_size, "left"):
+                        break
                     self.armID += 1
                     self.spineID += 1
                     if self.currentPartCount == self.totalPartNum:
@@ -208,6 +244,9 @@ class SOLUTION:
                     
                 ## ONLY RIGHT ARM ##
                 elif armChoice == 2:
+                    left_arm_joint = np.array([0, -(spine_size[1] / 2), spine_pos[2]])
+                    self.partsToAdd[spine_name + "_leftArm"] = ["arm", "left", self.spineID, left_arm_joint]
+                    self.totalPartsToAdd += 1
                     joint_pos = np.array([-(spine_size[0] / 2), (spine_size[1] / 2), spine_pos[2]])
                     joint_name = spine_name + "_arm" + str(self.armID)
                     # pyrosim.Send_Joint( name = joint_name , parent= spine_name , child = "arm" + str(self.armID), type = "revolute", position = joint_pos.tolist(), jointAxis = "0 1 0")
@@ -220,10 +259,11 @@ class SOLUTION:
                     self.everything.append([arm_name, arm_pos, arm_size, "cube"])
                     self.sensors.append(arm_name)
                     self.currentPartCount += 1
-                    if self.currentPartCount == self.totalPartNum:
-                        break
+                    # if self.currentPartCount == self.totalPartNum:
+                    #     break
                     # ADD LEG #
-                    self.addLegs(arm_size, "right")
+                    if not self.addLegs(arm_size, "right"):
+                        break
                     self.spineID += 1
                     self.armID += 1
                     if self.currentPartCount == self.totalPartNum:
@@ -243,10 +283,11 @@ class SOLUTION:
                     self.everything.append([arm_name, arm_pos, arm_size, "cube"])
                     self.sensors.append(arm_name)
                     self.currentPartCount += 1
-                    if self.currentPartCount == self.totalPartNum:
-                        break
+                    # if self.currentPartCount == self.totalPartNum:
+                    #     break
                     # ADD LEFT LEG #
-                    self.addLegs(arm_size, "left")
+                    if not self.addLegs(arm_size, "left"):
+                        break
                     self.armID += 1
                     if self.currentPartCount == self.totalPartNum:
                         break
@@ -265,41 +306,59 @@ class SOLUTION:
                     self.sensors.append(arm_name)
                     self.currentPartCount += 1
                     self.spineID += 1
-                    if self.currentPartCount == self.totalPartNum:
-                        break 
+                    # if self.currentPartCount == self.totalPartNum:
+                    #     break 
                     
                    # ADD RIGHT LEG #
-                    self.addLegs(arm_size, "right")
+                    if not self.addLegs(arm_size, "right"):
+                        break
                     self.armID += 1
                     if self.currentPartCount == self.totalPartNum:
                         break
 
     def addLegs(self, arm_size, side):
-        legChoice = np.random.randint(low=0, high=3, size = 1)[0]
-        if legChoice == 0:
-            pass
+        if side == "left":
+            joint_pos = np.array([0, -(arm_size[1]), 0])
         else:
-            if side == "left":
-                joint_pos = np.array([0, -(arm_size[1]), 0])
+            joint_pos = np.array([0, (arm_size[1]), 0])
+        if self.currentPartCount == self.totalPartNum:
+            arm_name = "arm" + str(self.armID)
+            self.partsToAdd[arm_name + "_lowerLeg"] = ["leg", "lowerLeg", self.armID, joint_pos]
+            self.totalPartsToAdd += 1
+            self.partsToAdd[arm_name + "_upperLeg"] = ["leg", "upperLeg", self.armID, joint_pos]
+            self.totalPartsToAdd += 1
+            return False
+
+        legChoice = np.random.randint(low=0, high=3, size = 1)[0]
+
+        if legChoice == 0:
+            return True
+        else:
+            leg_size = np.array([np.maximum(0.75,np.random.random_sample()) * arm_size[0], np.maximum(0.75,np.random.random_sample()) * arm_size[1], np.maximum(0.1,np.random.random_sample()) * c.maxHeight])
+            if legChoice == 1:
+                arm_name = "arm" + str(self.armID)
+                self.partsToAdd[arm_name + "_upperLeg"] = ["leg", "upper", self.armID, joint_pos]
+                leg_pos = np.array([0, 0, -(leg_size[2] / 2)])
+                self.totalPartsToAdd += 1
             else:
-                joint_pos = np.array([0, (arm_size[1]), 0])
+                arm_name = "arm" + str(self.armID)
+                self.partsToAdd[arm_name + "_lowerLeg"] = ["leg", "lower", self.armID, joint_pos]
+                leg_pos = np.array([0, 0, (leg_size[2] / 2)])
+                self.totalPartsToAdd += 1
             joint_name = "arm" + str(self.armID) + "_leg" + str(self.legID)
             parent_name = "arm" + str(self.armID)
             child_name = "leg" + str(self.legID)
             # pyrosim.Send_Joint( name = joint_name , parent= parent_name , child = child_name, type = "revolute", position = joint_pos.tolist(), jointAxis = "0 1 0")
             self.everything.append([joint_name, parent_name, child_name, joint_pos, "joint"])
             self.motors.append(joint_name)
-            leg_size = np.array([np.maximum(0.75,np.random.random_sample()) * arm_size[0], np.maximum(0.75,np.random.random_sample()) * arm_size[1], np.maximum(0.1,np.random.random_sample()) * c.maxHeight])
-            if legChoice == 1:
-                leg_pos = np.array([0, 0, -(leg_size[2] / 2)])
-            else:
-                leg_pos = np.array([0, 0, (leg_size[2] / 2)])
+            
             leg_name = "leg" + str(self.legID)
             # pyrosim.Send_Cube(name= leg_name, pos= leg_pos , size= leg_size)
             self.everything.append([leg_name, leg_pos, leg_size, "cube"])
             self.sensors.append(leg_name)
             self.legID += 1
             self.currentPartCount += 1
+            return True
             
 
     def Generate_Body(self):
@@ -333,7 +392,11 @@ class SOLUTION:
 
     def Mutate(self):
         print("everything")
-        print(self.everything)        
+        print(self.everything)
+        print("parts to add")
+        print(self.partsToAdd)       
+        print("total part")
+        print(self.totalPartsToAdd) 
         randomRow = random.randint(0, len(self.sensors) - 1)
         randomColumn = random.randint(0, len(self.motors) - 1)
         self.weights[randomRow,randomColumn] = (random.random() * 2) - 1

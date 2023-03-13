@@ -17,7 +17,7 @@ sleepTimer = 1/60
 
 force = 100
 
-numberOfGenerations = 3
+numberOfGenerations = 1
 
 populationSize = 1
 
@@ -29,8 +29,8 @@ numSensorNeurons = bodyNum + 1
 
 numMotorNeurons = bodyNum
 
-maxHeight = 2
+maxHeight = 1
 
-maxWidth = 2
+maxWidth = 1
 
-maxLength = 2
+maxLength = 1
