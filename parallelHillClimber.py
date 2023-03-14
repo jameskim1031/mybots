@@ -35,11 +35,6 @@ class PARALLEL_HILL_CLIMBER:
         self.fitnessCurves[currentGeneration] = highest_fitness
         self.mutationProcess.append(best_parent.thingsWeMutated)
 
-        # all_solution = self.parents.items()
-        # highest_fitness = max(all_solution, key=lambda x: x[1].fitness)
-        # self.fitnessCurves[currentGeneration] = highest_fitness[1].fitness
-        # self.mutationProcess.append(highest_fitness[1].thingsWeMutated)
-
     def Evolve(self):
         self.Evaluate(self.parents)
         for currentGeneration in range(c.numberOfGenerations):
