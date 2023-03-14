@@ -72,7 +72,9 @@ def Generate_Body(self):
         pyrosim.End()
 ```
 
-Along with storing all relevant parameter in **self.everything**, I also keep track of just the blocks in a global variable called **self.sensors** and just the joints in a global varibale called **self.motors**. The variable that stores the blocks are called **self.sensors** because it is the parts/ blocks that senses the surroundings just like your body parts senses your surroundings. The variable that stores the joinst are called **self.motors** because it is the joints that moves the robot parts just like your elbow moves your upper arm and lower arm. Just like your sensors and joints comumunicate with each other in your body (e.g. when you grab a hot pot, your hand sensors tell your body to move your hand), our robot's sensors and motors communicate with each other. This is done in the **Generate_Brain** function. 
+Along with storing all relevant parameter in **self.everything**, I also keep track of just the blocks in a global variable called **self.sensors** and just the joints in a global varibale called **self.motors**. The variable that stores the blocks are called **self.sensors** because it is the parts/ blocks that senses the surroundings just like your body parts senses your surroundings. The variable that stores the joinst are called **self.motors** because it is the joints that moves the robot parts just like your elbow moves your upper arm and lower arm. Just like your sensors and joints comumunicate with each other in your body (e.g. when you grab a hot pot, your hand sensors tell your body to move your hand), our robot's sensors and motors communicate with each other. The communication 
+
+This is done in the **Generate_Brain** function. 
 
 ```
 def Generate_Brain(self):
@@ -106,3 +108,6 @@ So now that we understand how robots are generated in pyrosim, let's dive into h
 
 In the figure above, I wasn't able to finish the tree for the far right "Two Arms" because of space, however, the same logic follows for the left and right arm. This tree repeats each time a new spine is added. Throughout the generation, a global variable **self.currentPartCount** keeps track of how many parts are created. Generation stops as soon as **self.currentPartCount** reaches **self.totalPartNum**.
 
+### Mutation
+
+Now that we know how the robot is initially generated, we will look into how the robot is mutates throughout generations. 
