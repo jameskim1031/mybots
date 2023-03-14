@@ -20,6 +20,8 @@ class PARALLEL_HILL_CLIMBER:
 
     def getBest(self, currentGeneration):
         highest_fitness = float('-inf')
+        print("self.parents.items")
+        print(self.parents.items())
         for i, parent in self.parents.items():
             if currentGeneration in [0, c.numberOfGenerations / 2, c.numberOfGenerations - 1]:
                 if not os.path.exists("pickles"):

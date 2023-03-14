@@ -17,9 +17,9 @@ sleepTimer = 1/1000
 
 force = 75
 
-numberOfGenerations = 100
+numberOfGenerations = 500
 
-populationSize = 1
+populationSize = 10
 
 motorJointRange = 0.6
 
@@ -35,4 +35,4 @@ maxWidth = 1
 
 maxLength = 1
 
-numOfSeeds = 5
+numOfSeeds = 10

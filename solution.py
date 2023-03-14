@@ -141,6 +141,7 @@ class SOLUTION:
                     #     break
                     # ADD LEG #
                     if not self.addLegs(arm_size, "right"):
+                        self.spineID += 1
                         break
                     self.spineID += 1
                     self.armID += 1
@@ -166,6 +167,7 @@ class SOLUTION:
                     #     break
                     # ADD LEFT LEG #
                     if not self.addLegs(arm_size, "left"):
+                        ######### POTENTIAL HAZARD
                         break
                     self.armID += 1
                     if self.currentPartCount == self.totalPartNum:
@@ -185,13 +187,16 @@ class SOLUTION:
                     self.everything.append([arm_name, arm_pos, arm_size, color, "cube"])
                     self.sensors.append(arm_name)
                     self.currentPartCount += 1
-                    self.spineID += 1
+                    
                     # if self.currentPartCount == self.totalPartNum:
                     #     break 
                     
                    # ADD RIGHT LEG #
                     if not self.addLegs(arm_size, "right"):
+                        self.armID += 1
+                        self.spineID += 1
                         break
+                    self.spineID += 1
                     self.armID += 1
                     if self.currentPartCount == self.totalPartNum:
                         break
@@ -319,7 +324,6 @@ class SOLUTION:
                     #     break
                     # ADD LEFT LEG #
                     if not self.addLegs(arm_size, "left"):
-                        ############ TESTING############ ALL OF IT
                         self.armID += 1
                         self.partsToAdd[spine_name + "_rightArm"] = ["arm", "right", self.spineID, spine_size, np.array([-(spine_size[0] / 2), (spine_size[1] / 2), spine_pos[2]])]
                         self.totalPartsToAdd += 1
@@ -444,8 +448,6 @@ class SOLUTION:
         pyrosim.End()
 
     def Mutate(self): 
-        print("self.everything")
-        print(self.everything)
         mutateChoice = np.random.randint(low=0, high=3, size = 1)[0]
         if mutateChoice == 0:
             # simply change one of the synapse
@@ -455,9 +457,7 @@ class SOLUTION:
             self.weights[randomRow,randomColumn] = (random.random() * 2) - 1
         elif mutateChoice == 1:
             # add another part
-            print("adding part")
-            print(self.partsToAdd)
-            print(self.partsToRemove)
+            
             if self.partsToAdd == {}:
                 return
             new_row = (np.random.rand(1, self.weights.shape[1]) * 2) - 1
@@ -515,14 +515,10 @@ class SOLUTION:
                 self.armID += 1
                 del self.partsToAdd[partToAdd]
         else:
-            print("removing part")
-            print(self.partsToAdd)
-            print(self.partsToRemove)
             if self.partsToRemove == {}:
                 return
             partToRemove, detail = random.choice(list(self.partsToRemove.items()))
             part_name, joint_name = detail[0], detail[1]
-            print("part to remove")
             
             filtered_list = []
             for x in self.everything:
@@ -543,6 +539,7 @@ class SOLUTION:
             self.everything = filtered_list
             remove_col = self.motors.index(motor)
             self.motors.pop(remove_col)
+
             self.thingsWeMutated.append("removed " + str(part_name))
             self.partsToAdd = {key: value for key, value in self.partsToAdd.items() if part_name not in key}
             self.weights = np.delete(self.weights, remove_row, axis=0)
