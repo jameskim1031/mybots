@@ -13,13 +13,13 @@ FLPhaseOffset = 0
 length = 1000
 start, end = 0, np.pi * 2
 
-sleepTimer = 1/60
+sleepTimer = 1/1000
 
-force = 60
+force = 75
 
-numberOfGenerations = 50
+numberOfGenerations = 100
 
-populationSize = 10
+populationSize = 1
 
 motorJointRange = 0.6
 
@@ -34,3 +34,5 @@ maxHeight = 1
 maxWidth = 1
 
 maxLength = 1
+
+numOfSeeds = 5
