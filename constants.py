@@ -15,11 +15,11 @@ start, end = 0, np.pi * 2
 
 sleepTimer = 1/60
 
-force = 100
+force = 60
 
-numberOfGenerations = 10
+numberOfGenerations = 50
 
-populationSize = 1
+populationSize = 10
 
 motorJointRange = 0.6
 
