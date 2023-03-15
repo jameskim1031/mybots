@@ -22,12 +22,6 @@ Welcome to James's Ludobot Playground! Here, I will provide you step by step exp
     
     * The robots you will see are from running 500,000 simulations
     
-3. Observe our best robots:
-    
-    * FINISH THIS PART
-    
-    
-    
 ## Documentation
 
 In this documentation, I will show how the robot's body and brain is first generated. Then I will explain how the creature chooses to mutate at each generation and perform selection to improve itself through parallel hillclimber. Finally, I will share some plots I collected to provide evidence that the robots really did improve over mulitple generations.
@@ -118,6 +112,7 @@ Now that we know how the robot is initially generated, we will look into how the
 2. Add a body part
 3. Remove a body part
 
+#### Method 1: Change Synapse
 If a robot chooses method 1, it randomly selects a sensor and motor pairing represented by self.weights[sensor, motor]. Then it updates this value with another random value. This changes the weight of the synapse between the selected sensor and motor. 
 ```
 randomRow = random.randint(0, len(self.sensors) - 1)
@@ -125,10 +120,126 @@ randomColumn = random.randint(0, len(self.motors) - 1)
 self.weights[randomRow,randomColumn] = (random.random() * 2) - 1
 ```
 
+#### Method 2: Add Part
 If a robot chooses method 2, it will randomly select a body part to add to the robot. How does the robot know which body part to add to which body part? Dictionary! A global dictionary called **self.partsToAdd** keeps track of all body parts that can be added at each mutation. Here is a representation of how parts are added to **self.partsToAdd**:
 
 <div align="center">
   <img src="https://user-images.githubusercontent.com/95663596/225173027-3adb4454-259d-4f34-b10e-0f3d22b2b81e.jpg" width="600">
 </div>
 
-The left side of the diagram represents the current robot with its parts labelled. The right side of the diagram shows the same robot but with orange parts that shows which parts can be added and still maintain the spine -> arm -> leg structure that we established. Thus, all the orange parts are added to **self.partsToAdd**. Then in the Mutate() function, the robot will randomly select one of the key, value pairings of this **self.partsToAdd** dictionary and append it to **self.everything** so that the new part is included in the next generation. If a part is added, the robot also makes sure to update the **self.partsToAdd** dictionary so that it includes new parts that can be added. An example is shown below
+The left side of the diagram represents the current robot with its parts labelled. The right side of the diagram shows the same robot but with orange parts that shows which parts can be added and still maintain the spine -> arm -> leg structure that we established. Thus, all the orange parts are added to **self.partsToAdd**. Then in the Mutate() function, the robot will randomly select one of the key, value pairings of this **self.partsToAdd** dictionary and append it to **self.everything** so that the new part is included in the next generation. If a part is added, the robot also makes sure to update the **self.partsToAdd** dictionary so that it includes new parts that can be added. An example is shown below: 
+
+<div align="center">
+  <img src="https://user-images.githubusercontent.com/95663596/225174322-e89d6256-b4d2-4a6f-9e32-1646e6a3c08f.jpg" width="700">
+</div>
+
+As you can see, an new arm has been formed and two new parts to add have been created in the purple circle.
+
+#### Method 3: Remove Part
+If a robot chooses method 3, it will randomly select a body part to remove from the robot. Similarly to the method 2, the robot uses a dictionary called **self.partsToRemove** to keep track of existing parts to remove. For this, the robot identify the leaf node body parts during the initial generation and adds it to the dictionary. Then the Mutate() function randomly chooses a part to remove from the dictionary, identifies which elements of the self.everything list matches with the randomly selected part, and removes the element from self.everything. Thus, the robot will no longer have those existing parts in the next generation. Below is an example:
+
+<div align="center">
+  <img src="https://user-images.githubusercontent.com/95663596/225175064-0dfcedbc-cd95-4a9e-8293-12f9f7a02a16.jpg" width="700">
+</div>
+
+The left side represents current robot and the right side shows potential parts to remove as circled in orange. Similar to method 2, the Mutate() function makes sure to add new potential parts to remove if removing a part creates another leaf node body part. An example is shown below:
+
+<div align="center">
+  <img src="https://user-images.githubusercontent.com/95663596/225175482-13a3f121-80c3-49c6-b8be-46e5a6a9f9e5.jpg" width="700">
+</div>
+
+As you can see, one of the legs has been removed and the attached arm has been now identified as a potential part to remove.
+
+### Selection: Hill climber
+
+Now that the robot is able to mutate its body, how does it decide which version of the body to keep? This question is key to our topic of "evolving" robot. For a robot to evolve means is to mutate itself to get better at something. This what **hill climbing** is. Every time our robot mutates, our program will select which version of the robot performed better. 
+
+In our program, the goal of the robot is to travel the furthest in the positive x direction. Thus, the **fitness** value of our robots are how far each robot traveled in the positive x direciotn.
+
+The robot's Get_Fitness() function in robot.py collects the fitness values:
+```
+def Get_Fitness(self):
+        basePositionAndOrientation = p.getBasePositionAndOrientation(self.robotId)
+        basePosition = basePositionAndOrientation[0]
+        xPosition = basePosition[0]
+
+        f = open("tmp" + self.solutionID + ".txt", "w")
+        f.write(str(xPosition))
+        f.close()
+        
+        os.system("rename tmp" + self.solutionID + ".txt fitness" + self.solutionID + ".txt")
+        exit()
+```
+
+At each mutation, the hill climbing algorithm will compare the fitness of the parent (previous) generation and the child (new) generation then keep the the generation that traveled the furthest in the positive x direction. 
+
+The Select() function in parallelHillClimber.py performs this selection process:
+```
+def Select(self):
+        for i in self.parents:
+            if self.parents[i].fitness < self.children[i].fitness:
+                self.parents[i] = self.children[i]
+```
+
+We perform the "selection" by ensuring that the parent always has the best fitness. Thus, at the end of the hillclimbing, the parent will be the "best" robot. 
+
+### Parellel Hill Climber
+
+<img src="https://user-images.githubusercontent.com/95663596/225183856-3af89b68-7f06-4882-b9f6-ecd4db59fa5f.jpg" width="700">
+
+<img src="https://user-images.githubusercontent.com/95663596/225184009-bb41b0da-326b-4a7d-91ba-fef6596cbc25.jpg" width="700">
+
+What is interesting about our program is that we are able run multiple of these hill climbing selection in parallel. If this is confusing, think about it like this:
+
+A single hill climber is like giving a child random cookie ingredients to make a yummy cookie. Every 10 minutes, you magically duplicate the cookie into 2 cookies. You then give the child more ingredients and ask him to add those new ingredients to only one of the cookies. Once the child works on the cookie, you taste the two and only keep the cookie you like better. After many hours, you will have with you the best version of the cookie.
+
+In parallel hillclimbing, you have not 1 but 10 children to make you cookies in the same process. After many hours, you will have the amazing cookies from 10 children. Now for the final contest, you will try the top cookies from each of the children and choose the very best cookie.
+
+Applying this to our program, at the end of parallel hillclimbing, we will have with us the best robots of each population. Each child in the cookie contest represent each population of parallel hillclimbing. 
+
+``` 
+def Show_Best(self):
+        all_solution = self.parents.items()
+        highest_fitness = max(all_solution, key=lambda x: x[1].fitness)
+        highest_parent = highest_fitness[1]
+        highest_parent.Start_Simulation("GUI")
+```
+
+The **Show_Best()** function in **parallelHillClimber.py** does the "final contest" of the robots. The variable **self.parents** contains the best robot of each population represented by **self.parent**. The function compares the fitness values of all of the parents and find the robot that travels the furthest in the positive x-direction. Thus, parallel hill climbing allows us to select the best robot from a larger pool of robots by running multiple populations together.
+
+### Results
+
+For the final project, I was able to run 10 seeds of 500 generations and 10 population (a total of 500,000 simulation). To show that the robot actually improves (increases fitness value) over many generations, I created a plot that compares the number of generation and the fitness value of the best robot of each seed: 
+
+<div align="center">
+  <img src="https://user-images.githubusercontent.com/95663596/225186181-cdb10721-1a83-4e0f-b7c3-2755fe84b61a.png" width="700">
+</div>
+
+As you can see, there is a clear trend of the fitness value going up as the generation number increases. The flat parts of the lines represent when there are no new generation that are better than the current robot. Everytime there is a increase in the graph, it is showing that the parallel hill climb has found a better robot with better fitness value.
+
+As shown in the first section of this README, you are able to see the lineage of mutation for couple of the robots that I have generate using **load.py**. Here are couple examples that shows exactly how the robot has mutated. 
+
+Robot at generation 0:
+
+<img src="https://user-images.githubusercontent.com/95663596/225189442-1e3d5de6-a54c-4704-929f-bfaf4c0f51a6.png" width="200">
+
+
+Robot at generation 250:
+
+<img src="https://user-images.githubusercontent.com/95663596/225190170-e17c4c6e-0f2e-4343-9f84-83cb14c79dc7.png" width="200">
+
+
+Robot at generation 499:
+
+<img src="https://user-images.githubusercontent.com/95663596/225190236-6daade85-9744-4369-bc2c-c64bcebe6693.png" width="200">
+
+We can see from the 3 images above that between generation 0 and generation 250, the robot added arms and legs. There is no change of the robot physical body between 250 and 499. However, knowing that the fitness still improved, the robot probablychanged its synpase weights. This is an expected behavior of the robots as the graph indicates that the fitness value doesn't go up signifcantly after 250 generations. 
+
+### Conclusion
+
+I hope that this playground helped explain how we created a robot that evolved over many generations. The plot of 500,000 simulation showed that the robots did infact evolve to have greater fitness values over time. We also learned that the evolution has a logarithmic growth as shown in the plot and also the minimal physical changes it goes through after 250 generation. Again, I encourage you to play around with **load.py** to see the lineage of the robot's evolution over many generation and to also create your own robot using **search.py**
+
+
+## Citation
+* https://www.reddit.com/r/ludobots/
+* https://xenobots.github.io/
