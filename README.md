@@ -2,6 +2,11 @@
 
 Welcome to James's Ludobot Playground! Here, I will provide you step by step explanations on how my ludobots randomly form and evolve over generations to move faster in a straight line. I will also provide explanation on how you can generate your own random robots/ creatures and witness how they evolve! Hope you have a ludof fun!
 
+## Deliverables:
+- 2 minute video: https://youtu.be/fqxOYwTM7jE
+- 10 second gif: 
+
+
 ## Things you can do:
 
 1. Create your own robots (TRY IT OUT!):
