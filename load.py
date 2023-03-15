@@ -3,11 +3,11 @@ import parallelHillClimber
 
 # Select creature_number number:
     # 0 to 9
-creature_number = 0
+creature_number = 5
 
 # Select generation number:
     # either 0, 250, or 499
-generation_number = 0
+generation_number = 499
 
 
 ## change this path to "testing/" if you want to see your own robot!
