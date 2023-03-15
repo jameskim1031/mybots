@@ -14,12 +14,7 @@ for i in range(c.numOfSeeds):
     phc.Evolve()
     phc.Show_Best()
     fitness_curves[i] = phc.fitnessCurves
-
-    # if not os.path.exists("pickles"):
-    #     os.mkdir("pickles")
-    # with open(f"pickles/my_file{i}.pickle", "wb") as f:
-    #     pickle.dump(phc, f)
-
+    
 # Plotting Fitness
 for i in range(c.numOfSeeds):
     plt.plot(fitness_curves[i], label='Random Seed ' + str(i))

@@ -24,9 +24,9 @@ class PARALLEL_HILL_CLIMBER:
         print(self.parents.items())
         for i, parent in self.parents.items():
             if currentGeneration in [0, c.numberOfGenerations / 2, c.numberOfGenerations - 1]:
-                if not os.path.exists("pickles"):
-                    os.mkdir("pickles")
-                with open(f"pickles/parent{i}generation{currentGeneration}.pickle", "wb") as f:
+                if not os.path.exists("testing"):
+                    os.mkdir("testing")
+                with open(f"testing/parent{i}generation{currentGeneration}.pickle", "wb") as f:
                     pickle.dump(parent, f)
 
             if parent.fitness > highest_fitness:

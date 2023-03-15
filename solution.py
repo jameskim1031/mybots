@@ -429,22 +429,17 @@ class SOLUTION:
 
 
     def Generate_Brain(self):
-        pyrosim.Start_NeuralNetwork("brain" + str(self.myID) + ".nndf")
-        #### FIX THIS PART ####
-        
+        pyrosim.Start_NeuralNetwork("brain" + str(self.myID) + ".nndf")        
         name = 0
         for sensor in self.sensors:
             pyrosim.Send_Sensor_Neuron(name = name , linkName = sensor)
             name += 1
-
         for motor in self.motors:
             pyrosim.Send_Motor_Neuron( name = name , jointName = motor)
             name += 1
-        
         for currentRow in range(len(self.sensors)):
             for currentColumn in range(len(self.motors)):
-                pyrosim.Send_Synapse( sourceNeuronName = currentRow , targetNeuronName = currentColumn + len(self.sensors), weight = self.weights[currentRow, currentColumn])
-        
+                pyrosim.Send_Synapse( sourceNeuronName = currentRow , targetNeuronName = currentColumn + len(self.sensors), weight = self.weights[currentRow, currentColumn]) 
         pyrosim.End()
 
     def Mutate(self): 
