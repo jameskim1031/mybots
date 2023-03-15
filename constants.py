@@ -17,9 +17,9 @@ sleepTimer = 1/1000
 
 force = 75
 
-numberOfGenerations = 1
+numberOfGenerations = 5
 
-populationSize = 1
+populationSize = 2
 
 motorJointRange = 0.6
 
