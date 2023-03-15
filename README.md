@@ -112,4 +112,23 @@ In the figure above, I wasn't able to finish the tree for the far right "Two Arm
 
 ### Mutation
 
-Now that we know how the robot is initially generated, we will look into how the robot mutates throughout generations. 
+Now that we know how the robot is initially generated, we will look into how the robot mutates throughout generations. At each generation, the robot randomly chooses one of these 3 methods to mutate:
+
+1. Change a sensor/ motor synapse in self.weights
+2. Add a body part
+3. Remove a body part
+
+If a robot chooses method 1, it randomly selects a sensor and motor pairing represented by self.weights[sensor, motor]. Then it updates this value with another random value. This changes the weight of the synapse between the selected sensor and motor. 
+```
+randomRow = random.randint(0, len(self.sensors) - 1)
+randomColumn = random.randint(0, len(self.motors) - 1)
+self.weights[randomRow,randomColumn] = (random.random() * 2) - 1
+```
+
+If a robot chooses method 2, it will randomly select a body part to add to the robot. How does the robot know which body part to add to which body part? Dictionary! A global dictionary called **self.partsToAdd** keeps track of all body parts that can be added at each mutation. Here is a representation of how parts are added to **self.partsToAdd**:
+
+<div align="center">
+  <img src="https://user-images.githubusercontent.com/95663596/225173027-3adb4454-259d-4f34-b10e-0f3d22b2b81e.jpg" width="600">
+</div>
+
+The left side of the diagram represents the current robot with its parts labelled. The right side of the diagram shows the same robot but with orange parts that shows which parts can be added and still maintain the spine -> arm -> leg structure that we established. Thus, all the orange parts are added to **self.partsToAdd**. Then in the Mutate() function, the robot will randomly select one of the key, value pairings of this **self.partsToAdd** dictionary and append it to **self.everything** so that the new part is included in the next generation. If a part is added, the robot also makes sure to update the **self.partsToAdd** dictionary so that it includes new parts that can be added. An example is shown below
