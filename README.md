@@ -9,7 +9,7 @@ Welcome to James's Ludobot Playground! Here, I will provide you step by step exp
 
 * 2 minute video: https://youtu.be/fqxOYwTM7jE
 
-* Grading: Engineeringggg
+* Grading: Engineering
 
 ## Things you can do:
 
