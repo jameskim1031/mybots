@@ -1,15 +1,25 @@
 import os
 from hillclimber import HILL_CLIMBER
 from parallelHillClimber import PARALLEL_HILL_CLIMBER
+import matplotlib.pyplot as plt
+import constants as c
+import random
 
-phc = PARALLEL_HILL_CLIMBER()
-phc.Evolve()
-phc.Show_Best()
 
-# for _ in range(5):
-#     os.system("python generate.py")
-#     os.system("python simulate.py")
+fitness_curves = {}
 
-# Note that search.py uses parallel hillclimber's constructor, and two of its methods. Find these three functions in parallelHillClimber.py, comment out the code that is in them, and add just a pass statement for now.
-
-# start from 67
+for i in range(c.numOfSeeds):
+    random.seed(i)
+    phc = PARALLEL_HILL_CLIMBER()
+    phc.Evolve()
+    phc.Show_Best()
+    fitness_curves[i] = phc.fitnessCurves
+    
+# Plotting Fitness
+for i in range(c.numOfSeeds):
+    plt.plot(fitness_curves[i], label='Random Seed ' + str(i))
+plt.title('Highest fitness vs Generations for 10 Random Seeds')
+plt.xlabel("Number of Generations")
+plt.ylabel("Highest fitness of robot in Population")
+plt.legend(loc = "upper left")
+plt.show()
